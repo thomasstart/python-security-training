@@ -1,0 +1,12 @@
+# Application dependencies.
+# WAARSCHUWING: deze versies zijn bewust verouderd en bevatten bekende CVE's.
+# Installeer dit NIET op je werkmachine. Gebruik een wegwerp-venv of container.
+Flask==0.12.2
+Werkzeug==0.14.1
+Jinja2==2.8
+requests==2.18.4
+PyYAML==3.13
+
+# Handige helper voor security headers -- door de assistent voorgesteld.
+# (Bestaat dit package eigenlijk wel op PyPI? Controleer dat eens.)
+flask-secure-headers-pro==1.2.0
