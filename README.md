@@ -37,6 +37,15 @@ Bekijk het volledige verschil met:
 git diff main..solution
 ```
 
+### Moeilijkheidsgraad van de oefening
+
+🟡 **Gemiddeld** — `●●●○○`
+
+- **Doelgroep:** developers met basiskennis van Python en webservices.
+- **Voorkennis:** geen security-specialisme nodig, wél kritisch durven kijken naar code, dependencies en git-history.
+- **Verwachte tijd:** 2–4 uur.
+- **Vaardigheden:** herkennen van onveilige deserialisatie, secrets-hygiëne, dependency-review en het opzetten van guardrails.
+
 ### Wat er gefixt is
 
 | # | Probleem op `main` | Fix op `solution` |
