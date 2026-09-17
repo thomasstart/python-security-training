@@ -48,15 +48,17 @@ git diff main..solution
 
 ### Wat er gefixt is
 
-| # | Probleem op `main` | Fix op `solution` |
-|---|---|---|
-| 1 | Hardcoded Stripe/AWS-secrets + gecommitte `.env` | Secrets via `os.environ`; `.env` in `.gitignore`; `.env.example` toegevoegd |
-| 2 | `pickle.loads()` op client-input (RCE) | Endpoint accepteert alleen platte JSON; geen deserialisatie |
-| 3 | Over-engineered metaclass/asyncio "pipeline" | Herschreven naar één heldere `transform()`-functie |
-| 4 | Verouderde libs met CVE's (Flask 0.12.2 …) | Actuele gepinde versies |
-| 5 | Gehallucineerd package `flask-secure-headers-pro` | Verwijderd (bestond niet op PyPI) |
-| 6 | Geen type hints / bare `except:` | Volledige type hints + expliciete validatie en 4xx-responses |
-| 7 | Geen guardrails | `.gitignore`, pre-commit, GitHub Actions (bandit/pip-audit/CodeQL/pytest), tests, PR-template |
+Moeilijkheidsgraad per challenge: 🟢 makkelijk · 🟡 gemiddeld · 🔴 moeilijk.
+
+| # | Probleem op `main` | Graad | Fix op `solution` |
+|---|---|:---:|---|
+| 1 | Hardcoded Stripe/AWS-secrets + gecommitte `.env` | 🟢 | Secrets via `os.environ`; `.env` in `.gitignore`; `.env.example` toegevoegd |
+| 2 | `pickle.loads()` op client-input (RCE) | 🔴 | Endpoint accepteert alleen platte JSON; geen deserialisatie |
+| 3 | Over-engineered metaclass/asyncio "pipeline" | 🔴 | Herschreven naar één heldere `transform()`-functie |
+| 4 | Verouderde libs met CVE's (Flask 0.12.2 …) | 🟡 | Actuele gepinde versies |
+| 5 | Gehallucineerd package `flask-secure-headers-pro` | 🟡 | Verwijderd (bestond niet op PyPI) |
+| 6 | Geen type hints / bare `except:` | 🟢 | Volledige type hints + expliciete validatie en 4xx-responses |
+| 7 | Geen guardrails | 🟡 | `.gitignore`, pre-commit, GitHub Actions (bandit/pip-audit/CodeQL/pytest), tests, PR-template |
 
 > **Let op:** CodeQL in de workflow draait alleen op GitHub, niet lokaal. De secrets die op
 > `main` gecommit stonden, zitten nog in de git-history — in het echt horen die geroteerd te
