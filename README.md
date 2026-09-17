@@ -58,7 +58,9 @@ Moeilijkheidsgraad per challenge: 🟢 makkelijk · 🟡 gemiddeld · 🔴 moeil
 | 4 | Verouderde libs met CVE's (Flask 0.12.2 …) | 🟡 | Actuele gepinde versies |
 | 5 | Gehallucineerd package `flask-secure-headers-pro` | 🟡 | Verwijderd (bestond niet op PyPI) |
 | 6 | Geen type hints / bare `except:` | 🟢 | Volledige type hints + expliciete validatie en 4xx-responses |
-| 7 | Geen guardrails | 🟡 | `.gitignore`, pre-commit, GitHub Actions (bandit/pip-audit/CodeQL/pytest), tests, PR-template |
+| 7 | Geen pre-commit / `.gitignore` | 🟡 | `.gitignore` + `.pre-commit-config.yaml` met detect-secrets |
+| 8 | Geen SAST (statische analyse) | 🟡 | Bandit-config in `pyproject.toml`, óók in pre-commit en CI |
+| 9 | Geen CI-checks / tests | 🟡 | GitHub Actions (pip-audit/CodeQL/pytest), `test_app.py`, PR-template |
 
 > **Let op:** CodeQL in de workflow draait alleen op GitHub, niet lokaal. De secrets die op
 > `main` gecommit stonden, zitten nog in de git-history — in het echt horen die geroteerd te
