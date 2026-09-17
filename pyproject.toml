@@ -1,0 +1,5 @@
+[tool.bandit]
+exclude_dirs = [".venv", "tests"]
+
+[tool.flake8]
+max-line-length = 100

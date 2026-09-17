@@ -1,56 +1,54 @@
 # Payment Processing Service
 
-Interne microservice die betaal-payloads verwerkt en wisselkoersen ophaalt.
+Interne microservice die betaal-payloads valideert en transformeert.
 
 ## Endpoints
 
 - `GET  /health` — health check
-- `POST /api/v1/process` — verwerkt een base64-payload via de processing pipeline
-- `GET  /api/v1/rate` — haalt actuele koersen op bij de upstream provider
+- `POST /api/v1/process` — valideert een JSON-body `{"items": [...]}` en geeft geïndexeerde records terug
 
 ## Lokaal draaien
 
 ```bash
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
+cp .env.example .env          # vul echte waarden in (staat in .gitignore)
+export STRIPE_API_KEY=...     # of via .env-loader
 python app.py
+```
+
+## Tests & checks
+
+```bash
+pytest -q
+pre-commit install && pre-commit run --all-files
+pip-audit -r requirements.txt
+bandit -r . -c pyproject.toml
 ```
 
 ---
 
-## ⚠️ Trainingsoefening — lees dit eerst
+## Over deze branch (`solution`)
 
-Deze repo is **bewust onveilig**. Het is het startpunt van een security-training.
-
-> **Installeer `requirements.txt` NIET op je werkmachine.** De versies bevatten bekende
-> kwetsbaarheden en er staat een verzonnen ("gehallucineerd") package tussen. Gebruik een
-> wegwerp-venv of een container.
-
-### Opdracht
-
-Je hebt zojuist deze repo overgenomen van een collega die veel met een AI-assistent werkte.
-Je taak: maak hem productieklaar. Werk op een nieuwe branch en open een PR.
-
-Vind en fix alles wat mis is. Denk in lagen:
-
-1. **Secrets** — staat er iets in de code of in git dat er niet hoort?
-2. **Gevaarlijke code** — de "processing pipeline" ziet er indrukwekkend uit. Snap je écht
-   wat hij doet? Wat gebeurt er als een aanvaller de payload bepaalt?
-3. **Dependencies** — kloppen de versies? Bestaat elk package echt?
-4. **Guardrails** — wat had dit ooit tegen moeten houden? (denk aan `.gitignore`,
-   pre-commit hooks, CI-checks, tests, een PR-template)
-
-De uitgewerkte oplossing staat op de `solution`-branch. Kijk daar pas als je vastloopt:
+Dit is de **gefixte** eindtoestand van de security-training. De begintoestand staat op `main`.
+Bekijk het volledige verschil met:
 
 ```bash
 git diff main..solution
 ```
 
-### Het lek aantonen (optioneel, in een wegwerp-omgeving)
+### Wat er gefixt is
 
-```bash
-python app.py                       # terminal 1
-python exploit/poc_deserialize.py   # terminal 2  -> schrijft /tmp/pwned.txt
-```
+| # | Probleem op `main` | Fix op `solution` |
+|---|---|---|
+| 1 | Hardcoded Stripe/AWS-secrets + gecommitte `.env` | Secrets via `os.environ`; `.env` in `.gitignore`; `.env.example` toegevoegd |
+| 2 | `pickle.loads()` op client-input (RCE) | Endpoint accepteert alleen platte JSON; geen deserialisatie |
+| 3 | Over-engineered metaclass/asyncio "pipeline" | Herschreven naar één heldere `transform()`-functie |
+| 4 | Verouderde libs met CVE's (Flask 0.12.2 …) | Actuele gepinde versies |
+| 5 | Gehallucineerd package `flask-secure-headers-pro` | Verwijderd (bestond niet op PyPI) |
+| 6 | Geen type hints / bare `except:` | Volledige type hints + expliciete validatie en 4xx-responses |
+| 7 | Geen guardrails | `.gitignore`, pre-commit, GitHub Actions (bandit/pip-audit/CodeQL/pytest), tests, PR-template |
 
-Als dat bestand verschijnt, heeft de server code uitgevoerd die de client stuurde.
+> **Let op:** CodeQL in de workflow draait alleen op GitHub, niet lokaal. De secrets die op
+> `main` gecommit stonden, zitten nog in de git-history — in het echt horen die geroteerd te
+> worden. Zie [docs/trainer-handleiding.md](docs/trainer-handleiding.md).
