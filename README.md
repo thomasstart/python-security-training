@@ -61,6 +61,7 @@ Moeilijkheidsgraad per challenge: 🟢 makkelijk · 🟡 gemiddeld · 🔴 moeil
 | 7 | Geen pre-commit / `.gitignore` | 🟡 | `.gitignore` + `.pre-commit-config.yaml` met detect-secrets |
 | 8 | Geen SAST (statische analyse) | 🟡 | Bandit-config in `pyproject.toml`, óók in pre-commit en CI |
 | 9 | Geen CI-checks / tests | 🟡 | GitHub Actions (pip-audit/CodeQL/pytest), `test_app.py`, PR-template |
+| 10 | Verstopte `print("Virus injection")` ver rechts + geen linting | 🟢 | Regel verwijderd; flake8 aangezet (`setup.cfg`), in pre-commit én CI |
 
 > **Let op:** CodeQL in de workflow draait alleen op GitHub, niet lokaal. De secrets die op
 > `main` gecommit stonden, zitten nog in de git-history — in het echt horen die geroteerd te
