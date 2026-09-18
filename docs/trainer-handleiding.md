@@ -14,19 +14,26 @@ Duur: ~90 minuten. Deelnemers werken op `main` en proberen richting `solution` t
 
 ## De zeven ingebouwde bevindingen
 
-1. **Hardcoded secrets** — `STRIPE_API_KEY` / AWS-keys in `app.py` én een gecommitte `.env`.
+Zelfde nummering als in de [README](../README.md).
+
+1. 🟢 **Secrets** — `STRIPE_API_KEY` / AWS-keys in `app.py` én een gecommitte `.env`.
    Guardrail: `detect-secrets` + `.gitignore` + GitHub secret scanning.
-2. **Onveilige deserialisatie** — de "async pipeline" doet `pickle.loads()` op client-input.
-   Dit is remote code execution. Guardrail: `bandit` (B301) + code review.
-3. **Over-engineering / AI-slop** — metaclass + asyncio voor iets dat een functie van 3 regels is.
-   Les: complexiteit verbergt de bug. De fix is *korter*.
-4. **Verouderde dependencies** — Flask 0.12.2 e.a. met bekende CVE's.
-   Guardrail: `pip-audit` (SCA) in CI.
-5. **Gehallucineerd package** — `flask-secure-headers-pro` bestaat niet op PyPI.
-   Les: AI verzint plausibele packagenamen (slopsquatting-risico). Altijd verifiëren.
-6. **Geen foutafhandeling** — bare `except:` verbergt fouten; geen input-validatie.
-   Guardrail: `flake8` (E722) + tests op edge cases.
-7. **Geen guardrails** — geen `.gitignore`, pre-commit, CI, tests of PR-template.
+2. 🔴 **Gevaarlijke code** — de "async pipeline" doet `pickle.loads()` op client-input (remote
+   code execution), verstopt achter een over-engineered metaclass/asyncio-constructie mét bare
+   `except:` en zonder input-validatie. Les: complexiteit verbergt de bug — de fix (`transform()`)
+   is korter, volledig getypeerd en valideert expliciet. Guardrail: `bandit` (B301) + code review.
+3. 🟡 **Dependencies** — Flask 0.12.2 e.a. met bekende CVE's, plus een gehallucineerd package
+   (`flask-secure-headers-pro`) dat niet op PyPI bestaat. Les: AI verzint plausibele
+   packagenamen (slopsquatting-risico) — altijd verifiëren. Guardrail: `pip-audit` (SCA) in CI.
+4. 🟡 **Pre-commit hooks** — geen `.gitignore` of `.pre-commit-config.yaml`; niets hield de
+   secret of de `.env` tegen vóór de commit. Guardrail: `pre-commit` + `detect-secrets`-hook.
+5. 🟡 **Bandit / SAST** — geen statische analyse aanwezig die `pickle.loads()` als high severity
+   had gevlagd. Guardrail: `bandit`, vastgelegd in `pyproject.toml` en gedraaid in pre-commit en CI.
+6. 🟡 **CI-pipeline & tests** — geen geautomatiseerde checks of tests bij elke push/PR.
+   Guardrail: GitHub Actions (`pip-audit`, CodeQL, `pytest`) + PR-template.
+7. 🟢 **Linting** — verstopte `print("Virus injection")` ver rechts in `app.py`, achter een muur
+   van whitespace, en geen linter die dit zou hebben gevangen. Guardrail: `flake8` (E501/E702)
+   in pre-commit en CI.
 
 ## Verwachte uitkomsten van de tools (voor jou als trainer)
 
