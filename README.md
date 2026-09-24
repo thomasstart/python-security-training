@@ -4,26 +4,28 @@ Interne microservice die betaal-payloads valideert en transformeert.
 
 ## Endpoints
 
+- `GET  /` — homepage met overzicht van de endpoints
 - `GET  /health` — health check
 - `POST /api/v1/process` — valideert een JSON-body `{"items": [...]}` en geeft geïndexeerde records terug
 
 ## Lokaal draaien
 
+Vereist Python 3.13 en [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements-dev.txt
-cp .env.example .env          # vul echte waarden in (staat in .gitignore)
-export STRIPE_API_KEY=...     # of via .env-loader
-python app.py
+uv venv && source .venv/bin/activate
+uv pip install -r requirements-dev.txt
+cp .env.example .env          # vul STRIPE_API_KEY in (lokaal mag een dummy-waarde)
+uv run --env-file .env python app.py   # http://127.0.0.1:5001
 ```
 
 ## Tests & checks
 
 ```bash
-pytest -q
-pre-commit install && pre-commit run --all-files
-pip-audit -r requirements.txt
-bandit -r . -c pyproject.toml
+uv run pytest -q
+uv run pre-commit install && uv run pre-commit run --all-files
+uv run pip-audit -r requirements.txt
+uv run bandit -r . -c pyproject.toml
 ```
 
 ---

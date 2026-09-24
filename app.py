@@ -34,6 +34,27 @@ def transform(items: list[Any]) -> list[dict[str, Any]]:
     return [{"index": i, "value": item} for i, item in enumerate(items)]
 
 
+INDEX_HTML = """<!doctype html>
+<html lang="nl">
+<head><meta charset="utf-8"><title>Payment Processing Service</title></head>
+<body>
+  <h1>Payment Processing Service</h1>
+  <p>Interne microservice die betaal-payloads valideert en transformeert.</p>
+  <ul>
+    <li><a href="/health"><code>GET /health</code></a> &mdash; health check</li>
+    <li><code>POST /api/v1/process</code> &mdash; JSON-body <code>{"items": [...]}</code></li>
+  </ul>
+</body>
+</html>
+"""
+
+
+@app.route("/")
+def index() -> Any:
+    # Static page: no user input is rendered, so no XSS surface.
+    return INDEX_HTML
+
+
 @app.route("/health")
 def health() -> Any:
     return jsonify({"status": "ok"})
@@ -58,4 +79,5 @@ if __name__ == "__main__":
     # Read secrets from the environment; never hardcode them.
     _ = get_required_env("STRIPE_API_KEY")
     debug = os.environ.get("FLASK_DEBUG", "0") == "1"
-    app.run(host="127.0.0.1", port=5000, debug=debug)
+    port = int(os.environ.get("PORT", "5001"))
+    app.run(host="127.0.0.1", port=port, debug=debug)
