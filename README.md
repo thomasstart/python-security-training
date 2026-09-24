@@ -11,7 +11,7 @@ Interne microservice die betaal-payloads verwerkt en wisselkoersen ophaalt.
 
 ## Lokaal draaien
 
-Vereist Python 3.13 en [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
+Vereist Python 3.11 en [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
 
 ```bash
 uv venv && source .venv/bin/activate
