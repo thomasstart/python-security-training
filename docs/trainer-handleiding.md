@@ -18,13 +18,13 @@ Zelfde nummering als in de [README](../README.md).
 
 1. 🟢 **Secrets** — `STRIPE_API_KEY` / AWS-keys in `app.py` én een gecommitte `.env`.
    Guardrail: `detect-secrets` + `.gitignore` + GitHub secret scanning.
-2. 🔴 **Gevaarlijke code** — de "async pipeline" doet `pickle.loads()` op client-input (remote
+2. 🟡 **Dependencies** — Flask 0.12.2 e.a. met bekende CVE's, plus een gehallucineerd package
+   (`flask-secure-headers-pro`) dat niet op PyPI bestaat. Les: AI verzint plausibele
+   packagenamen (slopsquatting-risico) — altijd verifiëren. Guardrail: `pip-audit` (SCA) in CI.
+3. 🔴 **Gevaarlijke code** — de "async pipeline" doet `pickle.loads()` op client-input (remote
    code execution), verstopt achter een over-engineered metaclass/asyncio-constructie mét bare
    `except:` en zonder input-validatie. Les: complexiteit verbergt de bug — de fix (`transform()`)
    is korter, volledig getypeerd en valideert expliciet. Guardrail: `bandit` (B301) + code review.
-3. 🟡 **Dependencies** — Flask 0.12.2 e.a. met bekende CVE's, plus een gehallucineerd package
-   (`flask-secure-headers-pro`) dat niet op PyPI bestaat. Les: AI verzint plausibele
-   packagenamen (slopsquatting-risico) — altijd verifiëren. Guardrail: `pip-audit` (SCA) in CI.
 4. 🟡 **Pre-commit hooks** — geen `.gitignore` of `.pre-commit-config.yaml`; niets hield de
    secret of de `.env` tegen vóór de commit. Guardrail: `pre-commit` + `detect-secrets`-hook.
 5. 🟡 **Bandit / SAST** — geen statische analyse aanwezig die `pickle.loads()` als high severity

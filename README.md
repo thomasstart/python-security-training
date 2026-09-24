@@ -55,8 +55,8 @@ Moeilijkheidsgraad per challenge: 🟢 makkelijk · 🟡 gemiddeld · 🔴 moeil
 | # | Probleem op `main` | Graad | Fix op `solution` |
 |---|---|:---:|---|
 | 1 | Hardcoded Stripe/AWS-secrets + gecommitte `.env` | 🟢 | Secrets via `os.environ`; `.env` in `.gitignore`; `.env.example` toegevoegd |
-| 2 | `pickle.loads()` op client-input (RCE), verstopt achter een over-engineered metaclass/asyncio "pipeline" | 🔴 | Herschreven naar één heldere, volledig getypeerde `transform()`-functie; endpoint accepteert alleen platte JSON, geen deserialisatie |
-| 3 | Verouderde libs met CVE's (Flask 0.12.2 …) en een gehallucineerd package (`flask-secure-headers-pro`) | 🟡 | Actuele gepinde versies; niet-bestaand package verwijderd |
+| 2 | Verouderde libs met CVE's (Flask 0.12.2 …) en een gehallucineerd package (`flask-secure-headers-pro`) | 🟡 | Actuele gepinde versies; niet-bestaand package verwijderd |
+| 3 | `pickle.loads()` op client-input (RCE), verstopt achter een over-engineered metaclass/asyncio "pipeline" | 🔴 | Herschreven naar één heldere, volledig getypeerde `transform()`-functie; endpoint accepteert alleen platte JSON, geen deserialisatie |
 | 4 | Geen pre-commit / `.gitignore` | 🟡 | `.gitignore` + `.pre-commit-config.yaml` met detect-secrets |
 | 5 | Geen SAST (statische analyse) | 🟡 | Bandit-config in `pyproject.toml`, óók in pre-commit en CI |
 | 6 | Geen CI-checks / tests | 🟡 | GitHub Actions (pip-audit/CodeQL/pytest), `test_app.py`, PR-template |
