@@ -25,21 +25,21 @@ uv run python app.py
 
 Deze repo is **bewust onveilig**. Het is het startpunt van een security-training.
 
-> **Installeer `requirements.txt` NIET op je werkmachine.** De versies bevatten bekende
-> kwetsbaarheden en er staat een verzonnen ("gehallucineerd") package tussen. Gebruik een
+> **Installeer `requirements.txt` zoals hierboven beschreven en verwijder de .venv weer na de workshop.** De versies bevatten bekende
+> kwetsbaarheden en kloppen misschien ook niet. Gebruik een
 > wegwerp-venv of een container.
 
 ### Opdracht
 
-Je hebt zojuist deze repo overgenomen van een collega die veel met een AI-assistent werkte.
-Je taak: maak hem productieklaar. Werk op een nieuwe branch en open een PR.
+Je hebt zojuist deze repo overgenomen.
+Je taak: maak hem productieklaar. Werk op een nieuwe feature-branch en open een PR.
 
 Vind en fix alles wat mis is. Denk in lagen:
 
 1. **Secrets** — staat er iets in de code of in git dat er niet hoort?
-2. **Gevaarlijke code** — de "processing pipeline" ziet er indrukwekkend uit. Snap je écht
+2. **Dependencies** — kloppen de versies? Bestaat elk package echt?
+3. **Gevaarlijke code** — de "processing pipeline" ziet er indrukwekkend uit. Snap je écht
    wat hij doet? Wat gebeurt er als een aanvaller de payload bepaalt?
-3. **Dependencies** — kloppen de versies? Bestaat elk package echt?
 4. **Guardrails** — wat had dit ooit tegen moeten houden? (denk aan `.gitignore`,
    pre-commit hooks, CI-checks, tests, een PR-template)
 
@@ -78,7 +78,36 @@ git log --oneline -- .env       # en sinds wanneer?
 
 </details>
 
-#### 2. Gevaarlijke code 🔴
+#### 2. Dependencies 🟡
+
+**Waar je op let:** oude versies hebben bekende kwetsbaarheden (CVE's). En AI-assistenten
+verzinnen soms packages die niet bestaan. Een aanvaller kan zo'n naam registreren en er
+malware in stoppen (*slopsquatting*).
+
+**Probeer:**
+
+```bash
+uv pip install pip-audit
+uv run pip-audit -r requirements.txt     # welke CVE's zijn bekend?
+```
+
+Zoek elk package op [pypi.org](https://pypi.org) op. Bestaat het? Wie onderhoudt het? Wanneer
+kwam de laatste release uit?
+
+<details>
+<summary>Hint</summary>
+
+- Eén package in `requirements.txt` bestaat helemaal niet op PyPI. Verwijder het.
+- Werk de rest bij naar de nieuwste versie en **pin** die (`==`), zodat iedereen hetzelfde
+  installeert. Draai `pip-audit` opnieuw tot er niets meer gevonden wordt.
+- Tip: zet tools die je alleen tijdens het ontwikkelen gebruikt (pytest, bandit, …) in een
+  apart `requirements-dev.txt`.
+- Lukt de installatie? Dan kun je de app nu ook echt starten (`uv run python app.py`).
+  Dat heb je nodig bij de volgende laag.
+
+</details>
+
+#### 3. Gevaarlijke code 🔴
 
 **Waar je op let:** laat je niet afleiden door ingewikkelde constructies (metaclasses, asyncio,
 decorators). Volg gewoon wat er met de input van de gebruiker gebeurt, van `request` tot het
@@ -118,33 +147,6 @@ Met `pickle` kan een object bij het uitpakken zélf bepalen welke functie er wor
   uitleggen, kun je ook niet reviewen.
 - Kijk ook even naar de rest van `app.py`: `debug=True`, `host="0.0.0.0"`, een kale `except:`
   en een `requests.get()` zonder `timeout`. Wat betekenen die in productie?
-
-</details>
-
-#### 3. Dependencies 🟡
-
-**Waar je op let:** oude versies hebben bekende kwetsbaarheden (CVE's). En AI-assistenten
-verzinnen soms packages die niet bestaan. Een aanvaller kan zo'n naam registreren en er
-malware in stoppen (*slopsquatting*).
-
-**Probeer:**
-
-```bash
-uv pip install pip-audit
-uv run pip-audit -r requirements.txt     # welke CVE's zijn bekend?
-```
-
-Zoek elk package op [pypi.org](https://pypi.org) op. Bestaat het? Wie onderhoudt het? Wanneer
-kwam de laatste release uit?
-
-<details>
-<summary>Hint</summary>
-
-- Eén package in `requirements.txt` bestaat helemaal niet op PyPI. Verwijder het.
-- Werk de rest bij naar de nieuwste versie en **pin** die (`==`), zodat iedereen hetzelfde
-  installeert. Draai `pip-audit` opnieuw tot er niets meer gevonden wordt.
-- Tip: zet tools die je alleen tijdens het ontwikkelen gebruikt (pytest, bandit, …) in een
-  apart `requirements-dev.txt`.
 
 </details>
 
