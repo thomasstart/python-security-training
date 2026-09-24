@@ -31,9 +31,10 @@ Zelfde nummering als in de [README](../README.md).
    had gevlagd. Guardrail: `bandit`, vastgelegd in `pyproject.toml` en gedraaid in pre-commit en CI.
 6. 🟡 **CI-pipeline & tests** — geen geautomatiseerde checks of tests bij elke push/PR.
    Guardrail: GitHub Actions (`pip-audit`, CodeQL, `pytest`) + PR-template.
-7. 🟢 **Linting** — verstopte `print("Virus injection")` ver rechts in `app.py`, achter een muur
+7. 🟢 **Linting** — verstopte `print("virus running....")` ver rechts in `app.py`, achter een muur
    van whitespace, en geen linter die dit zou hebben gevangen. Guardrail: `flake8` (E501/E702)
-   in pre-commit en CI.
+   in pre-commit en CI. Let op: een kale `ruff check` vangt dit níét (E501/E702 staan standaard
+   uit); `ruff format --diff app.py` of `ruff check --select E501,E702` wel.
 
 ## Verwachte uitkomsten van de tools (voor jou als trainer)
 
