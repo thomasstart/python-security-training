@@ -10,7 +10,7 @@ Interne microservice die betaal-payloads verwerkt en wisselkoersen ophaalt.
 - `GET  /api/v1/rate` — haalt actuele koersen op bij de upstream provider
 
 ## Lokaal draaien
-
+**Voer dit uit na challenge 2!**
 Vereist Python 3.11 en [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
 
 ```bash
