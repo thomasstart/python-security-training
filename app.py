@@ -82,6 +82,27 @@ class DataPipeline(metaclass=PipelineMeta):
             self._loop.close()
 
 
+INDEX_HTML = """<!doctype html>
+<html lang="nl">
+<head><meta charset="utf-8"><title>Payment Processing Service</title></head>
+<body>
+  <h1>Payment Processing Service</h1>
+  <p>Interne microservice die betaal-payloads verwerkt en wisselkoersen ophaalt.</p>
+  <ul>
+    <li><a href="/health"><code>GET /health</code></a> &mdash; health check</li>
+    <li><code>POST /api/v1/process</code> &mdash; base64-payload via de processing pipeline</li>
+    <li><a href="/api/v1/rate"><code>GET /api/v1/rate</code></a> &mdash; actuele wisselkoersen</li>
+  </ul>
+</body>
+</html>
+"""
+
+
+@app.route("/")
+def index():
+    return INDEX_HTML
+
+
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"})

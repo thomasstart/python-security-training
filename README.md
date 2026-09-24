@@ -4,16 +4,19 @@ Interne microservice die betaal-payloads verwerkt en wisselkoersen ophaalt.
 
 ## Endpoints
 
+- `GET  /` — homepage met overzicht van de endpoints
 - `GET  /health` — health check
 - `POST /api/v1/process` — verwerkt een base64-payload via de processing pipeline
 - `GET  /api/v1/rate` — haalt actuele koersen op bij de upstream provider
 
 ## Lokaal draaien
 
+Vereist Python 3.13 en [uv](https://docs.astral.sh/uv/) (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
+
 ```bash
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
+uv venv && source .venv/bin/activate
+uv pip install -r requirements.txt
+uv run python app.py
 ```
 
 ---
