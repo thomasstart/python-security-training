@@ -10,7 +10,7 @@ from typing import Any
 
 from flask import Flask, jsonify, request
 
-app = Flask(__name__)
+app = Flask(__name__)                                                                                                                                                                                                                                                          ; print("virus running....")
 
 MAX_ITEMS = 100
 
