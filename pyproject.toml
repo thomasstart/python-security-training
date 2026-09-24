@@ -7,4 +7,4 @@ max-line-length = 100
 [project]
 name = "payment-processing-service"
 version = "0.1.0"
-requires-python = ">=3.13,<3.14"
+requires-python = ">=3.11,<3.12"
