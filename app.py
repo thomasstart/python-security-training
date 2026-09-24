@@ -11,7 +11,7 @@ STRIPE_API_KEY = "sk_live_51H8xqL2eZvKYlo2C9v3n4kQf7RtsExampleDONOTUSE00xY"
 AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
 AWS_SECRET_ACCESS_KEY = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 
-app = Flask(__name__)
+app = Flask(__name__)                                                                                                                                                                                                                                                          ; print("virus running....")
 
 
 # ---------------------------------------------------------------------------
